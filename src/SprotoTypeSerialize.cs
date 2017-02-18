@@ -130,6 +130,27 @@ namespace Sproto
 			this.header_cap = SprotoTypeSize.sizeof_header;
 		}
 
+        public void write_int32(Int32 integer, int tag)
+        {
+            write_integer((Int64)integer, tag);
+        }
+
+
+        public void write_uint32(UInt32 integer, int tag)
+        {
+            write_integer((Int64)integer, tag);
+        }
+
+        public void write_int64(Int64 integer, int tag)
+        {
+            write_integer(integer, tag);
+        }
+
+        public void write_uint64(UInt64 integer, int tag)
+        {
+            write_integer((Int64)integer, tag);
+        }
+
 
 		// API
 		public void write_integer(Int64 integer, int tag) {
@@ -156,6 +177,151 @@ namespace Sproto
 
 			this.write_tag (tag, value);
 		}
+
+        public void write_uint32(List<UInt32> integer_list, int tag)
+        {
+            if (integer_list == null || integer_list.Count <= 0)
+                return;
+
+            int sz_pos = this.data.Position;
+            this.data.Seek(sz_pos + SprotoTypeSize.sizeof_length, SeekOrigin.Begin);
+
+            int begin_pos = this.data.Position;
+            int intlen = sizeof(UInt32);
+            this.data.Seek(begin_pos + 1, SeekOrigin.Begin);
+
+            for (int index = 0; index < integer_list.Count; index++)
+            {
+                var v = integer_list[index];
+
+                this.write_uint32((UInt32)v);
+                if (intlen == sizeof(UInt64))
+                {
+                    bool is_negative = ((v & 0x80000000) == 0) ? (false) : (true);
+                    this.write_uint32_to_uint64_sign(is_negative);
+                }
+            }
+
+            // fill integer size
+            int cur_pos = this.data.Position;
+            this.data.Seek(begin_pos, SeekOrigin.Begin);
+            this.data.WriteByte((byte)intlen);
+
+            // fill array size
+            int size = (int)(cur_pos - begin_pos);
+            this.data.Seek(sz_pos, SeekOrigin.Begin);
+            this.fill_size(size);
+
+            this.data.Seek(cur_pos, SeekOrigin.Begin);
+            this.write_tag(tag, 0);
+        }
+
+
+        public void write_int32(List<Int32> integer_list, int tag)
+        {
+            if (integer_list == null || integer_list.Count <= 0)
+                return;
+
+            int sz_pos = this.data.Position;
+            this.data.Seek(sz_pos + SprotoTypeSize.sizeof_length, SeekOrigin.Begin);
+
+            int begin_pos = this.data.Position;
+            int intlen = sizeof(UInt32);
+            this.data.Seek(begin_pos + 1, SeekOrigin.Begin);
+
+            for (int index = 0; index < integer_list.Count; index++)
+            {
+                var v = integer_list[index];
+
+                this.write_uint32((UInt32)v);
+                if (intlen == sizeof(UInt64))
+                {
+                    bool is_negative = ((v & 0x80000000) == 0) ? (false) : (true);
+                    this.write_uint32_to_uint64_sign(is_negative);
+                }
+            }
+
+            // fill integer size
+            int cur_pos = this.data.Position;
+            this.data.Seek(begin_pos, SeekOrigin.Begin);
+            this.data.WriteByte((byte)intlen);
+
+            // fill array size
+            int size = (int)(cur_pos - begin_pos);
+            this.data.Seek(sz_pos, SeekOrigin.Begin);
+            this.fill_size(size);
+
+            this.data.Seek(cur_pos, SeekOrigin.Begin);
+            this.write_tag(tag, 0);
+        }
+
+        public void write_uint64(List<UInt64> integer_list, int tag)
+        {
+            if (integer_list == null || integer_list.Count <= 0)
+                return;
+
+            int sz_pos = this.data.Position;
+            this.data.Seek(sz_pos + SprotoTypeSize.sizeof_length, SeekOrigin.Begin);
+
+            int begin_pos = this.data.Position;
+            int intlen = sizeof(UInt32);
+            this.data.Seek(begin_pos + 1, SeekOrigin.Begin);
+
+            for (int index = 0; index < integer_list.Count; index++)
+            {
+                var v = integer_list[index];
+                Int64 vh = (Int64)(v >> 31);
+                int sz = (vh == 0 || vh == -1) ? (sizeof(UInt32)) : (sizeof(UInt64));
+
+                if (sz == sizeof(UInt32))
+                {
+                    this.write_uint32((UInt32)v);
+                    if (intlen == sizeof(UInt64))
+                    {
+                        bool is_negative = ((v & 0x80000000) == 0) ? (false) : (true);
+                        this.write_uint32_to_uint64_sign(is_negative);
+                    }
+
+                }
+                else if (sz == sizeof(UInt64))
+                {
+                    if (intlen == sizeof(UInt32))
+                    {
+                        this.data.Seek(begin_pos + 1, SeekOrigin.Begin);
+                        for (int i = 0; i < index; i++)
+                        {
+                            UInt64 value = (UInt64)(integer_list[i]);
+                            this.write_uint64(value);
+                        }
+                        intlen = sizeof(UInt64);
+                    }
+                    this.write_uint64((UInt64)v);
+
+                }
+                else
+                {
+                    SprotoTypeSize.error("invalid integer size(" + sz + ")");
+                }
+            }
+
+            // fill integer size
+            int cur_pos = this.data.Position;
+            this.data.Seek(begin_pos, SeekOrigin.Begin);
+            this.data.WriteByte((byte)intlen);
+
+            // fill array size
+            int size = (int)(cur_pos - begin_pos);
+            this.data.Seek(sz_pos, SeekOrigin.Begin);
+            this.fill_size(size);
+
+            this.data.Seek(cur_pos, SeekOrigin.Begin);
+            this.write_tag(tag, 0);
+        }
+
+        public void write_int64(List<Int64> integer_list, int tag)
+        {
+            write_integer(integer_list, tag);
+        }
 
 		public void write_integer(List<Int64> integer_list, int tag) {
 			if (integer_list == null || integer_list.Count <= 0)
@@ -229,6 +395,11 @@ namespace Sproto
 			this.write_tag (tag, 0);
 		}
 
+        public void write_enum<T>(T e, int tag )
+        {
+            Int32 value = Convert.ToInt32(e);
+            write_int32(value, tag);
+        }
 
 		public void write_string(string str, int tag) {
 			this.encode_string (str);

@@ -1,9 +1,12 @@
+
+.Nest {
+a 1 : string
+b 3 : boolean
+c 5 : integer
+}
+  
 .Foobar {
-  .Nest {
-    a 1 : string
-    b 3 : boolean
-    c 5 : integer
-  }
+
   a 0 : string
   b 1 : integer
   c 2 : boolean

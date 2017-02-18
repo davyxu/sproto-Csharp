@@ -18,7 +18,7 @@ namespace sprotoCsharp
 			obj.b = 1000000;
 			obj.c = true;
 
-			obj.d = new Foobar.Nest ();
+			obj.d = new Nest ();
 			obj.d.a = "world";
 			obj.d.c = -1;
 

@@ -18,6 +18,7 @@ namespace sprotoCsharp
 			new TestCaseTestAll ().run ();
 			new TestCaseRpc ().run ();
 			new TestCaseMap ().run ();
+            new TestCaseExtend().run();
 		}
 
 	}

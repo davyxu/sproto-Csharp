@@ -16,13 +16,13 @@ namespace sprotoCsharp
 			person.name = "Alice";
 			person.id = 10000;
 
-			person.phone = new System.Collections.Generic.List<Person.PhoneNumber> ();
-			Person.PhoneNumber num1 = new Person.PhoneNumber ();
+			person.phone = new System.Collections.Generic.List<PhoneNumber> ();
+			PhoneNumber num1 = new PhoneNumber ();
 			num1.number = "123456789";
 			num1.type = 1;
 			person.phone.Add (num1);
 
-			Person.PhoneNumber num2 = new Person.PhoneNumber ();
+			PhoneNumber num2 = new PhoneNumber ();
 			num2.number = "87654321";
 			num2.type = 2;
 			person.phone.Add (num2);
@@ -32,8 +32,8 @@ namespace sprotoCsharp
 			Person person1 = new Person ();
 			person1.name = "Bob";
 			person1.id = 20000;
-			person1.phone = new System.Collections.Generic.List<Person.PhoneNumber> ();
-			Person.PhoneNumber num3 = new Person.PhoneNumber ();
+			person1.phone = new System.Collections.Generic.List<PhoneNumber> ();
+			PhoneNumber num3 = new PhoneNumber ();
 			num3.number = "01234567890";
 			num3.type = 3;
 			person1.phone.Add (num3);

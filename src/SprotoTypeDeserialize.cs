@@ -107,6 +107,30 @@ namespace Sproto
 			return -1;
 		}
 
+        public Int32 read_int32()
+        {
+            return (Int32)read_integer();
+        }
+
+        public UInt32 read_uint32()
+        {
+            return (UInt32)read_integer();
+        }
+
+        public Int64 read_int64()
+        {
+            return read_integer();
+        }
+
+        public UInt64 read_uint64()
+        {
+            return (UInt64)read_integer();
+        }
+
+        public T read_enum<T>()
+        {
+            return (T)Enum.ToObject(typeof(T), read_int32());
+        }
 
 		public Int64 read_integer() {
 			if (this.value >= 0) {
@@ -129,12 +153,17 @@ namespace Sproto
 			return 0;
 		}
 
+        public List<Int64> read_int64_list()
+        {
+            return read_integer_list();
+        }
+
 		public List<Int64> read_integer_list() {
-			List<Int64> integer_list = null;
+            List<Int64> integer_list = new List<Int64>();
 
 			UInt32 sz = this.read_array_size ();
 			if (sz == 0) {
-				return new List<Int64> ();
+                return integer_list;
 			}
 
 			int len = this.reader.ReadByte ();
@@ -145,7 +174,7 @@ namespace Sproto
 					SprotoTypeSize.error ("error array size("+sz+")@sizeof(Uint32)");
 				}
 
-				integer_list = new List<Int64> ();
+				
 				for (int i = 0; i < sz / sizeof(UInt32); i++) {
 					UInt64 v = this.expand64 (this.read_dword ());
 					integer_list.Add ((Int64)v);
@@ -155,8 +184,7 @@ namespace Sproto
 				if (sz % sizeof(UInt64) != 0) {
 					SprotoTypeSize.error ("error array size("+sz+")@sizeof(Uint64)");
 				}
-
-				integer_list = new List<Int64> ();
+				
 				for (int i = 0; i < sz / sizeof(UInt64); i++) {
 					UInt32 low = this.read_dword ();
 					UInt32 hi  = this.read_dword (); 
@@ -170,6 +198,164 @@ namespace Sproto
 
 			return integer_list;
 		}
+
+        public List<UInt64> read_uint64_list()
+        {
+            List<UInt64> integer_list = new List<UInt64>();
+
+            UInt32 sz = this.read_array_size();
+            if (sz == 0)
+            {
+                return integer_list;
+            }
+
+            int len = this.reader.ReadByte();
+            sz--;
+
+            if (len == sizeof(UInt32))
+            {
+                if (sz % sizeof(UInt32) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint32)");
+                }
+
+
+                for (int i = 0; i < sz / sizeof(UInt32); i++)
+                {
+                    UInt64 v = this.expand64(this.read_dword());
+                    integer_list.Add((UInt64)v);
+                }
+
+            }
+            else if (len == sizeof(UInt64))
+            {
+                if (sz % sizeof(UInt64) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint64)");
+                }
+
+                for (int i = 0; i < sz / sizeof(UInt64); i++)
+                {
+                    UInt32 low = this.read_dword();
+                    UInt32 hi = this.read_dword();
+                    UInt64 v = (UInt64)low | (UInt64)hi << 32;
+                    integer_list.Add((UInt64)v);
+                }
+
+            }
+            else
+            {
+                SprotoTypeSize.error("error intlen(" + len + ")");
+            }
+
+            return integer_list;
+        }
+
+
+        public List<UInt32> read_uint32_list()
+        {
+            List<UInt32> integer_list = new List<UInt32>();
+
+            UInt32 sz = this.read_array_size();
+            if (sz == 0)
+            {
+                return integer_list;
+            }
+
+            int len = this.reader.ReadByte();
+            sz--;
+
+            if (len == sizeof(UInt32))
+            {
+                if (sz % sizeof(UInt32) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint32)");
+                }
+
+
+                for (int i = 0; i < sz / sizeof(UInt32); i++)
+                {
+                    UInt64 v = this.expand64(this.read_dword());
+                    integer_list.Add((UInt32)v);
+                }
+
+            }
+            else if (len == sizeof(UInt64))
+            {
+                if (sz % sizeof(UInt64) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint64)");
+                }
+
+                for (int i = 0; i < sz / sizeof(UInt64); i++)
+                {
+                    UInt32 low = this.read_dword();
+                    UInt32 hi = this.read_dword();
+                    UInt64 v = (UInt64)low | (UInt64)hi << 32;
+                    integer_list.Add((UInt32)v);
+                }
+
+            }
+            else
+            {
+                SprotoTypeSize.error("error intlen(" + len + ")");
+            }
+
+            return integer_list;
+        }
+
+
+        public List<Int32> read_int32_list()
+        {
+            List<Int32> integer_list = new List<Int32>();
+
+            UInt32 sz = this.read_array_size();
+            if (sz == 0)
+            {
+                return integer_list;
+            }
+
+            int len = this.reader.ReadByte();
+            sz--;
+
+            if (len == sizeof(UInt32))
+            {
+                if (sz % sizeof(UInt32) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint32)");
+                }
+
+
+                for (int i = 0; i < sz / sizeof(UInt32); i++)
+                {
+                    UInt64 v = this.expand64(this.read_dword());
+                    integer_list.Add((Int32)v);
+                }
+
+            }
+            else if (len == sizeof(UInt64))
+            {
+                if (sz % sizeof(UInt64) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint64)");
+                }
+
+                for (int i = 0; i < sz / sizeof(UInt64); i++)
+                {
+                    UInt32 low = this.read_dword();
+                    UInt32 hi = this.read_dword();
+                    UInt64 v = (UInt64)low | (UInt64)hi << 32;
+                    integer_list.Add((Int32)v);
+                }
+
+            }
+            else
+            {
+                SprotoTypeSize.error("error intlen(" + len + ")");
+            }
+
+            return integer_list;
+        }
 
 
 		public bool read_boolean() {
