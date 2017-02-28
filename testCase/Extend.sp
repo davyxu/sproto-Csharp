@@ -1,7 +1,7 @@
-.MyCar {
-	Monkey 	1
-	Monk 	2
-	Pig 	3
+enum MyCar {
+	Monkey =	1
+	Monk =	2
+	Pig =	3
 }
 
 

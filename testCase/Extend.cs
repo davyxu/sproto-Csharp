@@ -154,4 +154,15 @@ namespace SprotoType
 	}
 
 
+    public class RegisterEntry
+    {
+        static readonly Type[] _types = new Type[]{ 
+                typeof(MyData),
+            };
+
+        public static Type[] GetClassTypes()
+        {
+            return _types;
+        }
+    }
 }

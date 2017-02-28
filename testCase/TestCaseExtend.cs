@@ -8,6 +8,8 @@ namespace sprotoCsharp
     {
         public override void run()
         {
+            var ct = SprotoType.RegisterEntry.GetClassTypes();
+
             var md = new SprotoType.MyData();
             md.type = SprotoType.MyCar.Pig;
             md.name = "pig";

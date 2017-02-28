@@ -38,12 +38,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\..\..\proto\tool\here.cs">
-      <Link>here.cs</Link>
-    </Compile>
     <Compile Include="BenchMark.cs" />
     <Compile Include="Extend.cs" />
-    <Compile Include="Member.cs" />
+    <Compile Include="Member.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAll.cs" />
