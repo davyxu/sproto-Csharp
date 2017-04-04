@@ -135,6 +135,15 @@ namespace Sproto
             write_integer((Int64)integer, tag);
         }
 
+        public void write_float32(float f, int tag)
+        {
+            write_int32((Int32)(f * 1000), tag);
+        }
+
+        public void write_double(double f, int tag)
+        {
+            write_int64((Int64)(f * 1000), tag);
+        }
 
         public void write_uint32(UInt32 integer, int tag)
         {
@@ -172,7 +181,7 @@ namespace Sproto
 				sz = this.encode_uint64 (v);
 
 			} else {
-				SprotoTypeSize.error("invaild integer size.");
+				SprotoTypeSize.error("invalid integer size.");
 			}
 
 			this.write_tag (tag, value);
@@ -417,7 +426,7 @@ namespace Sproto
 			}
 			this.fill_size (sz);
 
-			// write stirng
+			// write string
 			foreach (string v in str_list) {
 				this.encode_string (v);
 			}

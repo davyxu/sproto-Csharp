@@ -112,6 +112,16 @@ namespace Sproto
             return (Int32)read_integer();
         }
 
+        public float read_float32( )
+        {
+            return (float)read_int32()  * 0.001f;
+        }
+
+        public double read_double()
+        {
+            return (double)read_int64() * 0.001;
+        }
+
         public UInt32 read_uint32()
         {
             return (UInt32)read_integer();

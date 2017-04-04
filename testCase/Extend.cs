@@ -19,17 +19,25 @@ namespace SprotoType
 
 
 
+	
 	public class MyData : SprotoTypeBase {
 		private static int max_field_count = 6;
 		
+		
+		[SprotoHasField]
+		public bool HasName{
+			get { return base.has_field.has_field(0); }
+		}
 		
 		private string _name; // tag 0
 		public string name {
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
 		}
-		public bool HasName{
-			get { return base.has_field.has_field(0); }
+		
+		[SprotoHasField]
+		public bool HasType{
+			get { return base.has_field.has_field(1); }
 		}
 		
 		private MyCar _type; // tag 1
@@ -37,8 +45,10 @@ namespace SprotoType
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
-		public bool HasType{
-			get { return base.has_field.has_field(1); }
+		
+		[SprotoHasField]
+		public bool HasInt32{
+			get { return base.has_field.has_field(2); }
 		}
 		
 		private Int32 _int32; // tag 2
@@ -46,8 +56,10 @@ namespace SprotoType
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
 		}
-		public bool HasInt32{
-			get { return base.has_field.has_field(2); }
+		
+		[SprotoHasField]
+		public bool HasInt64{
+			get { return base.has_field.has_field(3); }
 		}
 		
 		private Int64 _int64; // tag 3
@@ -55,8 +67,10 @@ namespace SprotoType
 			get{ return _int64; }
 			set{ base.has_field.set_field(3,true); _int64 = value; }
 		}
-		public bool HasInt64{
-			get { return base.has_field.has_field(3); }
+		
+		[SprotoHasField]
+		public bool HasUint32{
+			get { return base.has_field.has_field(4); }
 		}
 		
 		private UInt32 _uint32; // tag 4
@@ -64,17 +78,16 @@ namespace SprotoType
 			get{ return _uint32; }
 			set{ base.has_field.set_field(4,true); _uint32 = value; }
 		}
-		public bool HasUint32{
-			get { return base.has_field.has_field(4); }
+		
+		[SprotoHasField]
+		public bool HasUint64{
+			get { return base.has_field.has_field(5); }
 		}
 		
 		private UInt64 _uint64; // tag 5
 		public UInt64 uint64 {
 			get{ return _uint64; }
 			set{ base.has_field.set_field(5,true); _uint64 = value; }
-		}
-		public bool HasUint64{
-			get { return base.has_field.has_field(5); }
 		}
 		
 		
@@ -157,7 +170,7 @@ namespace SprotoType
     public class RegisterEntry
     {
         static readonly Type[] _types = new Type[]{ 
-                typeof(MyData),
+                typeof(MyData), // 529527944
             };
 
         public static Type[] GetClassTypes()
