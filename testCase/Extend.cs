@@ -28,6 +28,7 @@ namespace SprotoType
 			get{ return _name; }
 			set{ base.has_field.set_field(0,true); _name = value; }
 		}
+		[SprotoHasField]
 		public bool HasName{
 			get { return base.has_field.has_field(0); }
 		}
@@ -37,6 +38,7 @@ namespace SprotoType
 			get{ return _type; }
 			set{ base.has_field.set_field(1,true); _type = value; }
 		}
+		[SprotoHasField]
 		public bool HasType{
 			get { return base.has_field.has_field(1); }
 		}
@@ -46,6 +48,7 @@ namespace SprotoType
 			get{ return _int32; }
 			set{ base.has_field.set_field(2,true); _int32 = value; }
 		}
+		[SprotoHasField]
 		public bool HasInt32{
 			get { return base.has_field.has_field(2); }
 		}
@@ -55,6 +58,7 @@ namespace SprotoType
 			get{ return _int64; }
 			set{ base.has_field.set_field(3,true); _int64 = value; }
 		}
+		[SprotoHasField]
 		public bool HasInt64{
 			get { return base.has_field.has_field(3); }
 		}
@@ -64,6 +68,7 @@ namespace SprotoType
 			get{ return _uint32; }
 			set{ base.has_field.set_field(4,true); _uint32 = value; }
 		}
+		[SprotoHasField]
 		public bool HasUint32{
 			get { return base.has_field.has_field(4); }
 		}
@@ -73,6 +78,7 @@ namespace SprotoType
 			get{ return _uint64; }
 			set{ base.has_field.set_field(5,true); _uint64 = value; }
 		}
+		[SprotoHasField]
 		public bool HasUint64{
 			get { return base.has_field.has_field(5); }
 		}
@@ -157,7 +163,7 @@ namespace SprotoType
     public class RegisterEntry
     {
         static readonly Type[] _types = new Type[]{ 
-                typeof(MyData),
+                typeof(MyData), // 529527944
             };
 
         public static Type[] GetClassTypes()

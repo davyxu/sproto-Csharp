@@ -5,13 +5,22 @@ enum MyCar {
 }
 
 
-.MyData{
-	name 0: string
-	type 1: MyCar
-	int32 2: int32	# extend standard
-	int64 3: int64	# extend standard
+message MyData {
+	name  string
+	type  MyCar
+	int32  int32	// extend standard
+	int64  int64	// extend standard
 	
-	uint32 4: uint32	# extend standard
-	uint64 5: uint64	# extend standard
+	address string
+	
+	uint32 uint32	// extend standard
+	uint64 uint64	// extend standard
+	
+}
+
+message FakeMyData{
+	name  string
+	type  MyCar
+	int32  int32	// extend standard	
 	
 }
