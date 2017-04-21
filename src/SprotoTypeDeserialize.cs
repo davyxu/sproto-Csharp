@@ -397,6 +397,7 @@ namespace Sproto
 			return System.Text.Encoding.UTF8.GetString (buffer);
 		}
 
+
 		public List<string> read_string_list() {
 			UInt32 sz = this.read_array_size ();
 
@@ -423,6 +424,46 @@ namespace Sproto
 
 			return string_list;
 		}
+
+
+        public byte[] read_bytes()
+        {
+            UInt32 sz = this.read_dword();
+            byte[] buffer = new byte[sz];
+            this.reader.Read(buffer, 0, buffer.Length);
+            return buffer;
+        }
+
+
+        public List<byte[]> read_bytes_list()
+        {
+            UInt32 sz = this.read_array_size();
+
+            List<byte[]> data_list = new List<byte[]>();
+            for (UInt32 i = 0; sz > 0; i++)
+            {
+                if (sz < SprotoTypeSize.sizeof_length)
+                {
+                    SprotoTypeSize.error("error array size.");
+                }
+
+                UInt32 hsz = this.read_dword();
+                sz -= (UInt32)SprotoTypeSize.sizeof_length;
+
+                if (hsz > sz)
+                {
+                    SprotoTypeSize.error("error array object.");
+                }
+
+                byte[] buffer = new byte[hsz];
+                this.reader.Read(buffer, 0, buffer.Length);
+
+                data_list.Add(buffer);
+                sz -= hsz;
+            }
+
+            return data_list;
+        }
 
 
 		public T read_obj<T>() where T : SprotoTypeBase, new() {

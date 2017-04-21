@@ -17,6 +17,7 @@ namespace ExtendTest
             md.int64 = Int64.MaxValue;
             md.uint64 = UInt64.MaxValue;
             md.uint32 = UInt32.MaxValue;
+            md.Stream = new byte[] { 1, 2, 3, 4 };
 
             var data = md.encode();
 

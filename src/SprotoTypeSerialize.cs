@@ -80,7 +80,7 @@ namespace Sproto
 
 		private void fill_size(int sz) {
 			if (sz < 0)
-				SprotoTypeSize.error ("fill invaild size.");
+				SprotoTypeSize.error ("fill invalid size.");
 
 			this.write_uint32 ((UInt32)sz);
 		}
@@ -106,6 +106,13 @@ namespace Sproto
 
 			return SprotoTypeSize.sizeof_length + s.Length;
 		}
+        private int encode_bytes(byte[] s)
+        {            
+            this.fill_size(s.Length);
+            this.data.Write(s, 0, s.Length);
+
+            return SprotoTypeSize.sizeof_length + s.Length;
+        }
 
 			
 		private int encode_struct(SprotoTypeBase obj){
@@ -433,6 +440,36 @@ namespace Sproto
 
 			this.write_tag (tag, 0);
 		}
+
+        public void write_bytes(byte[] data, int tag)
+        {
+            this.encode_bytes(data);
+            this.write_tag(tag, 0);
+        }
+
+        public void write_bytes(List<byte[]> data_list, int tag)
+        {
+            if (data_list == null || data_list.Count <= 0)
+                return;
+
+            // write size length
+            int sz = 0;
+            foreach (byte[] v in data_list)
+            {
+                sz += SprotoTypeSize.sizeof_length + v.Length;
+            }
+            this.fill_size(sz);
+
+            // write string
+            foreach (byte[] v in data_list)
+            {
+                this.encode_bytes(v);
+            }
+
+            this.write_tag(tag, 0);
+        }
+
+
 
 
 		public void write_obj(SprotoTypeBase obj, int tag) {

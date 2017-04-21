@@ -111,7 +111,7 @@ namespace SprotoType
 
 	
 	public class MyData : SprotoTypeBase {
-		private static int max_field_count = 7;
+		private static int max_field_count = 8;
 		
 		
 		[SprotoHasField]
@@ -191,6 +191,17 @@ namespace SprotoType
 			set{ base.has_field.set_field(6,true); _uint64 = value; }
 		}
 		
+		[SprotoHasField]
+		public bool HasStream{
+			get { return base.has_field.has_field(7); }
+		}
+		
+		private byte[] _Stream; // tag 7
+		public byte[] Stream {
+			get{ return _Stream; }
+			set{ base.has_field.set_field(7,true); _Stream = value; }
+		}
+		
 		
 		public MyData() : base(max_field_count) {}
 		
@@ -231,6 +242,10 @@ namespace SprotoType
 					this.uint64 = base.deserialize.read_uint64();
 					break;
 				
+				case 7:
+					this.Stream = base.deserialize.read_bytes();
+					break;
+				
 				default:
 					base.deserialize.read_unknow_data ();
 					break;
@@ -268,6 +283,10 @@ namespace SprotoType
 			
 			if (base.has_field.has_field (6)) {
 				base.serialize.write_uint64(this.uint64, 6);
+			}
+			
+			if (base.has_field.has_field (7)) {
+				base.serialize.write_bytes(this.Stream, 7);
 			}
 			
 

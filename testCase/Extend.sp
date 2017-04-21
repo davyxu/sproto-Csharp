@@ -16,6 +16,7 @@ message MyData {
 	uint32 uint32	// extend standard
 	uint64 uint64	// extend standard
 	
+	Stream bytes
 }
 
 message FakeMyData{
