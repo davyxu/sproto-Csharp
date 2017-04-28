@@ -417,6 +417,46 @@ namespace Sproto
             write_int32(value, tag);
         }
 
+        public void write_enum<T>(List<T> integer_list, int tag)
+        {
+            if (integer_list == null || integer_list.Count <= 0)
+                return;
+
+            int sz_pos = this.data.Position;
+            this.data.Seek(sz_pos + SprotoTypeSize.sizeof_length, SeekOrigin.Begin);
+
+            int begin_pos = this.data.Position;
+            int intlen = sizeof(UInt32);
+            this.data.Seek(begin_pos + 1, SeekOrigin.Begin);
+
+            for (int index = 0; index < integer_list.Count; index++)
+            {
+                var v = integer_list[index];
+
+                var vv = Convert.ToUInt32(v);
+
+                this.write_uint32(vv);
+                if (intlen == sizeof(UInt64))
+                {
+                    bool is_negative = ((vv & 0x80000000) == 0) ? (false) : (true);
+                    this.write_uint32_to_uint64_sign(is_negative);
+                }
+            }
+
+            // fill integer size
+            int cur_pos = this.data.Position;
+            this.data.Seek(begin_pos, SeekOrigin.Begin);
+            this.data.WriteByte((byte)intlen);
+
+            // fill array size
+            int size = (int)(cur_pos - begin_pos);
+            this.data.Seek(sz_pos, SeekOrigin.Begin);
+            this.fill_size(size);
+
+            this.data.Seek(cur_pos, SeekOrigin.Begin);
+            this.write_tag(tag, 0);
+        }
+
 		public void write_string(string str, int tag) {
 			this.encode_string (str);
 			this.write_tag (tag, 0);

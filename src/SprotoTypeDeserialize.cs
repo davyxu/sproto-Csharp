@@ -315,6 +315,60 @@ namespace Sproto
         }
 
 
+        public List<T> read_enum_list<T>()
+        {
+            List<T> integer_list = new List<T>();
+
+            UInt32 sz = this.read_array_size();
+            if (sz == 0)
+            {
+                return integer_list;
+            }
+
+            int len = this.reader.ReadByte();
+            sz--;
+
+            if (len == sizeof(UInt32))
+            {
+                if (sz % sizeof(UInt32) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint32)");
+                }
+
+
+                for (int i = 0; i < sz / sizeof(UInt32); i++)
+                {
+                    UInt64 v = this.expand64(this.read_dword());
+
+                    integer_list.Add((T)Enum.ToObject(typeof(T), v));
+                }
+
+            }
+            else if (len == sizeof(UInt64))
+            {
+                if (sz % sizeof(UInt64) != 0)
+                {
+                    SprotoTypeSize.error("error array size(" + sz + ")@sizeof(Uint64)");
+                }
+
+                for (int i = 0; i < sz / sizeof(UInt64); i++)
+                {
+                    UInt32 low = this.read_dword();
+                    UInt32 hi = this.read_dword();
+                    UInt64 v = (UInt64)low | (UInt64)hi << 32;
+                    integer_list.Add((T)Enum.ToObject(typeof(T), v));
+                }
+
+            }
+            else
+            {
+                SprotoTypeSize.error("error intlen(" + len + ")");
+            }
+
+            return integer_list;
+        }
+
+
         public List<Int32> read_int32_list()
         {
             List<Int32> integer_list = new List<Int32>();
